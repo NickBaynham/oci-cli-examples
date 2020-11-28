@@ -1,0 +1,1 @@
+oci iam compartment list --config-file ../config
