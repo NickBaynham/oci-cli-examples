@@ -1,0 +1,1 @@
+oci iam region list --config-file ../config
