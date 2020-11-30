@@ -1,0 +1,30 @@
+# Create a VCN in the default compartment specified in ../oci_cli_rc config file
+export vcn_ocid=`oci network vcn create --cidr-block 192.168.3.0/24 --display-name cli-vcn-test-1 --query "data.id" --config-file ../config --cli-rc-file ../oci_cli_rc | tr -d '"'`
+echo $vcn_ocid
+
+# Create an Internet Gateway within the VCN:
+export igw_ocid=`oci network internet-gateway create --vcn-id $vcn_ocid --display_name cli_igw-test-1 --is-enabled true --query "data.id" --config-file ../config --cli-rc-file ../oci_cli_rc | tr -d '"'`
+echo $igw_ocid
+
+# Add a new routing table with the relvant route rule:
+export route_rules="[{\"cidrBlock\":\"0.0.0.0/0\", \"networkEntityId\":\"$igw_ocid\"}]"
+echo $route_rules
+
+# Create a Subnet
+export ad1=`oci iam availability-domain list --query data[0].name --config-file ../config --cli-rc-rile ../oci_cli_rc | tr -d '"'`
+echo $ad1
+
+export subnet_ocid=`oci network subnet create --vcn-id $vcn_ocid --display-name cli-vcn-test-1 --cidr-block "192.168.3.0/30" --prohibit-public-ip-on-vnic false --availability-domain $ad1 --route-table-id $rt-ocid --query data.id --config-file ../config --cli-rc-file ../oci_cli_rc | tr -d '"'`
+echo $subnet_ocid
+
+# Launch a new compute instance:
+export image_ocid=`oci compute image list --shape "VM.Standard2.1" --operating-system "CentOS" --operating-system-version 7 --sort-by TIMECREATED --query data[0].id --config-file ../config --cli-rc-file ../oci_cli_rc | tr -d '"'`
+echo $image_ocid
+
+export vm_ocid=`oci compute instance launch --display-name cli-vm-test-1 --availability-domain "$ad1" --subnet-id "$subnet_ocid" --provate-ip 192.168.3.2 --image-id "$image_ocid" --shape VM.Standard2.1 --ssh-authorized-keys-file ~/ocid_id_rsa.pub --wait-for-state RUNNING --query data.id --config-file ../config --cli-rc-file ../oci_cli_rc | tr -d '"'`
+echo $vm_ocid
+
+# Query for the Public IP address of a compute instance running in a public subnet:
+export vm_public_ip=`oci compute instance list-vnics --instance-id "$vm_ocid" --query data[0].\"public-ip\" --raw-output --config-file ../config --cli-rc-file ../oci_cli_rc`
+echo $vm_public_ip
+
