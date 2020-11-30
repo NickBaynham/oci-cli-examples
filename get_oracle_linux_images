@@ -1,0 +1,2 @@
+TENANCY_OCID=`cat ../config | grep tenancy | sed 's/tenancy=//'`
+oci compute image list --compartment-id $TENANCY_OCID --operating-system "Oracle Linux" --output table --query "data [*].{Image:\"display-name\"}" --config-file ../config
