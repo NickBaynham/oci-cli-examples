@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Add a Routing Table
+
+igw_ocid=$1
+vcn_ocid=$2
+echo "Gateway: $igw_ocid"
+echo "VCN: $vcn_ocid"
+route_rules=[{\"cidrBlock\":\"0.0.0.0/0\",\"networkEntityId\":\"$igw_ocid\"}]
+rt_ocid=`oci network route-table create --config-file ../config --cli-rc-file ../oci_cli_rc --vcn-id $vcn_ocid --display-name cli-rt-test-1 --route-rules "$route_rules" --query "data.id" | tr -d '"'`
+echo $rt_ocid

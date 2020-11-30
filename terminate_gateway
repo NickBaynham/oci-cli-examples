@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Terminate a Gateway
+gateway=$1
+oci network internet-gateway delete --config-file ../config --cli-rc-file ../osi_cli_rc --ig-id $gateway --wait-for-state TERMINATED

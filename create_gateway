@@ -1,0 +1,4 @@
+# Create an Internet Gateway within the VCN:
+vcn_ocid=$1
+export igw_ocid=`oci network internet-gateway create --vcn-id $vcn_ocid --display-name cli_igw-test-1 --is-enabled true --query "data.id" --config-file ../config --cli-rc-file ../oci_cli_rc | tr -d '"'`
+echo $igw_ocid

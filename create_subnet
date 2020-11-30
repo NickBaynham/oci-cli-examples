@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Create a Subnet
+vcn_ocid=$1
+rt_ocid=$2
+
+ad1=`oci iam availability-domain list --query "data[0].name" --config-file ../config --cli-rc-file ../oci_cli_rc | tr -d '"'`
+echo "Availability Domain: $ad1"
+echo "VCN: $vcn_ocid"
+echo "Route Table: $rt_ocid"
+
+subnet_ocid=`oci network subnet create --config-file ../config --cli-rc-file ../oci_cli_rc --vcn-id $vcn_ocid --display-name "cli-vcn" --cidr-block "192.168.3.0/30" --prohibit-public-ip-on-vnic false --availability-domain $ad1 --route-table-id $rt_ocid --query "data.id" | tr -d '"'`
+echo $subnet_ocid

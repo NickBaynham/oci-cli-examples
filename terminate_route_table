@@ -1,0 +1,4 @@
+#!/bin/bash
+rt_ocid=$1
+echo "Route Table: $rt_ocid"
+oci network route-table delete --config-file ../config --cli-rc-file ../oci_cli_rc --rt-id $rt_ocid --wait-for-state TERMINATED

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Terminate a VCN
+vcn_ocid=$1
+echo "Terminating VCN: $vcn_ocid"
+oci network vcn delete --config-file ../config --vcn-id $vcn_ocid
+

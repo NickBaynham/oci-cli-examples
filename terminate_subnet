@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Terminate a Subnet
+subnet_ocid=$1
+echo "Terminating Subnet: $subnet_ocid"
+oci network subnet delete --config-file ../config --cli-rc-file ../oci_cli_rc --subnet-id $subnet_ocid --wait-for-state TERMINATED
