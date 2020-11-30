@@ -1,0 +1,2 @@
+TENANCY_OCID=`cat ../config | grep tenancy | sed 's/tenancy=//'`
+oci compute image list --config-file ../config --compartment-id $TENANCY_OCID --output table --operating-system "Canonical Ubuntu" --query query://list_ubuntu_1804 --cli-rc-file ./oci_cli_rc
