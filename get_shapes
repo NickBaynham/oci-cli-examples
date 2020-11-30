@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Get the Shapes Available to a Region
-oci compute shape list --config-file ../config --cli-rc-file ../oci_cli_rc
+oci compute shape list --config-file ../config --cli-rc-file ../oci_cli_rc --output table --query "data[*].shape"

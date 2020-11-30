@@ -7,7 +7,7 @@ echo "Subnet: $subnet_ocid"
 export image_ocid=`oci compute image list --shape "VM.Standard2.1" --operating-system "CentOS" --operating-system-version 7 --sort-by TIMECREATED --query data[0].id --config-file ../config --cli-rc-file ../oci_cli_rc | tr -d '"'`
 echo $image_ocid
 
-export vm_ocid=`oci compute instance launch --display-name cli-vm-test-1 --availability-domain "$ad1" --subnet-id "$subnet_ocid" --private-ip 192.168.3.2 --image-id "$image_ocid" --shape VM.Standard2.1 --ssh-authorized-keys-file ~/.ssh/id_rsa.pub --wait-for-state RUNNING --query data.id --config-file ../config --cli-rc-file ../oci_cli_rc | tr -d '"'`
+export vm_ocid=`oci compute instance launch --display-name cli-vm-test-1 --availability-domain "$ad1" --subnet-id "$subnet_ocid" --private-ip 192.168.3.2 --image-id "$image_ocid" --shape VM.Standard.E2.1 --ssh-authorized-keys-file ~/.ssh/id_rsa.pub --wait-for-state RUNNING --query data.id --config-file ../config --cli-rc-file ../oci_cli_rc | tr -d '"'`
 echo $vm_ocid
 
 # Query for the Public IP address of a compute instance running in a public subnet:
