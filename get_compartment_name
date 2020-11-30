@@ -1,0 +1,1 @@
+oci iam compartment get --output table --query "data.{CompartmentName:\"name\"}" --config-file ../config --cli-rc-file ../oci_cli_rc
