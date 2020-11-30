@@ -1,0 +1,2 @@
+export vcn_ocid=`oci network vcn create --cidr-block 192.168.3.0/24 --display-name cli-vcn-test-1 --query "data.id" --config-file ../config --cli-rc-file ../oci_cli_rc | tr -d '"'`
+echo $vcn_ocid
