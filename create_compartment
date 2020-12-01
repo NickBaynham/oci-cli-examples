@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Create a New Compartment
+HOME_REGION="us-ashburn-1"
+TENANCY_OCID=`cat ../config | grep tenancy | sed 's/tenancy=//'`
+NEW_COMPARTMENT_OCID=`oci iam compartment create --region $HOME_REGION --compartment-id $TENANCY_OCID --config-file ../config --name osmstest-1 --description "osms test terraformed" --query "data.id" | tr -d '"'`
+echo $NEW_COMPARTMENT_OCID

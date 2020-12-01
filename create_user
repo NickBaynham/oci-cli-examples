@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Create a Local User
+
+TENANCY_OCID=`cat ../config | grep tenancy | sed 's/tenancy=//'`
+oci iam user create --region us-ashburn-1 --config-file ../config --name osmstest-user-1 --description "osmstest user" -c $TENANCY_OCID --query "data.id" | tr -d '"'
+oci iam user list -c $TENANCY_OCID --config-file ../config --query "data [?starts_with(name, 'osmstest')].name" --all
+

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Delete a Compartment
+
+compartment_ocid=$1
+echo "Deleting Compartment $1"
+oci iam compartment delete --region us-ashburn-1 --config-file ../config --compartment-id $compartment_ocid --wait-for-state SUCCEEDED
