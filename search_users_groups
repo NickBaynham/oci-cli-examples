@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Search Users and Groups
+
+# Example - copy/paste and modify to use on the CL
+
+QUERY_TEXT="query user, group resources matching 'osmstest-'"
+QUERY='data.items[*].{Type:"resource-type",Name:"display-name",OCID:"identifier"}'
+
+oci search resource structured-search \
+  --query-text "$QUERY_TEXT" \
+  --query "$QUERY" \
+  --config-file ../config
