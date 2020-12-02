@@ -1,8 +1,14 @@
 #!/bin/bash
 
+if [ ! "$1" ]; then
+  echo "create_instance <subnet_ocid>"
+  exit 1
+fi
+
 ad1=$1
 subnet_ocid=$2
 echo "Subnet: $subnet_ocid"
+
 # Launch a new compute instance:
 export image_ocid=`oci compute image list --shape "VM.Standard2.1" --operating-system "CentOS" --operating-system-version 7 --sort-by TIMECREATED --query data[0].id --config-file ../config --cli-rc-file ../oci_cli_rc | tr -d '"'`
 echo $image_ocid

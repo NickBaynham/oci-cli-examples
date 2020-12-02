@@ -1,4 +1,24 @@
+#!/bin/bash
+
 # Create an Internet Gateway within the VCN:
-vcn_ocid=$1
-export igw_ocid=`oci network internet-gateway create --vcn-id $vcn_ocid --display-name cli_igw-test-1 --is-enabled true --query "data.id" --config-file ../config --cli-rc-file ../oci_cli_rc | tr -d '"'`
-echo $igw_ocid
+
+if [ ! "$1" ]; then
+    echo "create_gateway <vcn_ocid>"
+    exit 1
+fi
+
+VCN_OCID="$1"
+echo "Creating Gateway for $VCN_OCID"
+
+IGW_OCID=$(oci network internet-gateway create \
+  --vcn-id "$VCN_OCID" \
+  --display-name "cli_igw-test-1" \
+  --is-enabled true \
+  --query "data.id" \
+  --config-file ../config \
+  --cli-rc-file \
+  ../oci_cli_rc \
+  | tr -d '"' \
+  )
+
+echo "Created Internet Gateway: $IGW_OCID"

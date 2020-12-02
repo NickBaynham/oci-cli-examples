@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Create a Policy
+# --- Example Policy: allow group osmstest42 to manage all-resources in compartment osmstest4
+# statements='["allow group osmstest42 to manage all-resources in compartment osmstest42"]'
+
+if [ $# -ne 2 ]; then
+  echo "create_policy <policy_name> <statements>"
+  exit 1
+fi
+
+POLICY_NAME="$1"
+STATEMENTS="$2"
+TENANCY_OCID=$(cat ../config | grep tenancy | sed 's/tenancy=//')
+
+oci iam policy create \
+  --region "us-ashburn-1" \
+  --config-file ../config \
+  -c "$TENANCY_OCID" \
+  --name "$POLICY_NAME" \
+  --description "$POLICY_NAME CLI" \
+  --statements "$STATEMENTS"
