@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Search Resource - Structured Search
+
+# Example - copy/paste and modify to use as an OCI command
+
+TENANCY_OCID=$(cat ../config | grep tenancy | sed 's/tenancy=//')
+QUERY_TEXT="query instance resources where ( lifecyclestate = 'RUNNING' || lifecyclestate = 'TERMINATING' ) && compartmentId = '$TENANCY_OCID'"
+
+oci search resource structured-search \
+  --query-text "$QUERY_TEXT" \
+  --config-file ../config

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# List Load Balancer Shapes
+
+TENANCY_OCID=$(cat ../config | grep tenancy | sed 's/tenancy=//')
+
+oci lb shape list \
+  --config-file ../config \
+  --query 'data[*].{Shapes: name}' \
+  -c "$TENANCY_OCID" \
+  --output table

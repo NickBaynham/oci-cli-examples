@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Search Resource Free Text
+
+# This is an example, later to be parameterized or copy/paste to use directory and modify
+
+oci search resource free-text-search \
+  --text osmstest \
+  --query 'data.items[*].{Type:"resource-type",Name:"display-name",OCID:"identifier",State:"lifecycle-state"}' \
+  --config-file ../config
+
+
