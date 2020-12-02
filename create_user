@@ -2,7 +2,64 @@
 
 # Create a Local User
 
-TENANCY_OCID=`cat ../config | grep tenancy | sed 's/tenancy=//'`
-oci iam user create --region us-ashburn-1 --config-file ../config --name osmstest-user-1 --description "osmstest user" -c $TENANCY_OCID --query "data.id" | tr -d '"'
-oci iam user list -c $TENANCY_OCID --config-file ../config --query "data [?starts_with(name, 'osmstest')].name" --all
+if [ ! "$1" ]; then
+  echo "create_user <user_name>"
+  exit 1
+fi
 
+user_name="$1"
+echo "Creating user $user_name"
+
+TENANCY_OCID=$(cat ../config | grep tenancy | sed 's/tenancy=//')
+echo "Working in Tenancy $TENANCY_OCID"
+
+USER_OCID=$(oci iam user create  \
+  --region us-ashburn-1 \
+  --config-file ../config \
+  --name "$user_name" \
+  --description "$user_name CLI" \
+  -c "$TENANCY_OCID" \
+  --query "data.id" \
+  | tr -d '"')
+
+echo "User Ocid: $USER_OCID"
+
+SEARCH_RESULT=$(oci iam user list \
+  --config-file ../config \
+  -c "$TENANCY_OCID" \
+  --query "data[?name==$user_name] | [0].id" \
+  --all \
+  | tr -d '"' \
+  )
+
+echo "Found user $user_name ocid is $SEARCH_RESULT"
+
+SEARCH_RESULT_NAME=$(oci iam user list \
+  --config-file ../config \
+  -c "$TENANCY_OCID" \
+  --query "data[?name==$user_name] | [0].name" \
+  --all \
+  | tr -d '"' \
+  )
+
+echo "Found user $user_name name is $SEARCH_RESULT_NAME"
+
+# Generate a one-time password
+PASSWORD=$(oci iam user ui-password create-or-reset \
+  --region us-ashburn-1 \
+  --config-file ../config \
+  --user-id "$USER_OCID" \
+  --query "data.password" \
+  | tr -d '"')
+
+echo "Password is: $PASSWORD"
+
+# Upload a Public Key
+FINGERPRINT=$(oci iam user api-key upload \
+  --config-file ../config \
+  --region "us-ashburn-1" \
+  --user-id "$USER_OCID" \
+  --key-file ../oci_api_key_public.pem \
+  --query "data.fingerprint" | tr -d '"')
+
+echo "fingerprint is $FINGERPRINT"

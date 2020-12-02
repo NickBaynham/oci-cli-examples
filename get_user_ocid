@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Get the User OCID
+
+if [ ! "$1" ]; then
+  echo "get_user <user_name>"
+  exit 1
+fi
+
+user_name="$1"
+echo "Searching for user $user_name"
+
+TENANCY_OCID=$(cat ../config | grep tenancy | sed 's/tenancy=//')
+echo "Working in tenancy $TENANCY_OCID"
+
+USER_OCID=$(oci iam user list \
+  --config-file ../config \
+  -c "$TENANCY_OCID" \
+  --query "data[?name==$user_name] | [0].id" \
+  --all \
+  --raw-output \
+  )
+
+echo "User $user_name OCID is $USER_OCID"
