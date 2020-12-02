@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Remove a Group
+
+if [ ! $1 ]; then
+  echo "remove_group <group_name>"
+  exit 1
+fi
+
+TENANCY_OCID=$(cat ../config | grep tenancy | sed 's/tenancy=//')
+GROUP_NAME="$1"
+echo "Removing Group $GROUP_NAME"
+
+# Get the Group OCID
+
+GROUP_OCID=$(oci iam group list \
+  --region us-ashburn-1 \
+  --config-file ../config \
+  -c "$TENANCY_OCID" \
+  --all \
+  --query "data[?name=='$GROUP_NAME'] | [0].id" \
+  | tr -d '"')
+
+echo "OCID: $GROUP_OCID"
+
+oci iam group delete \
+  --region us-ashburn-1 \
+  --config-file ../config \
+  --group-id "$GROUP_OCID" \
+  --wait-for-state DELETED

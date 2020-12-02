@@ -13,5 +13,5 @@ echo "Terminating Group $GROUP_OCID"
 oci iam group delete \
   --region us-ashburn-1 \
   --config-file ../config \
-  --group-id $GROUP_OCID \
+  --group-id "$GROUP_OCID" \
   --wait-for-state DELETED
