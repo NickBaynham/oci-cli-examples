@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Add a User to a group
+
+if [ "$#" -ne 2 ]; then
+  echo "add_user_to_group <user_name> <group_name>"
+  exit 1
+fi
+
+USER_NAME="$1"
+GROUP_NAME="$2"
+TENANCY_OCID=$(cat ../config | grep tenancy | sed 's/tenancy=//')
+
+# Get the User OCID
+
+USER_OCID=$(oci iam user list \
+  --config-file ../config \
+  -c "$TENANCY_OCID" \
+  --query "data[?name=='$USER_NAME'] | [0].id" \
+  --all \
+  --raw-output \
+  )
+
+GROUP_OCID=$(oci iam group list \
+  --region us-ashburn-1 \
+  --config-file ../config \
+  -c $TENANCY_OCID \
+  --all \
+  --query "data[?name=='$GROUP_NAME'] | [0].id" \
+  | tr -d '"')
+
+echo "Adding $USER_NAME to $GROUP_NAME"
+echo "User OCID: $USER_OCID"
+echo "Group OCID: $GROUP_OCID"
+
+oci iam group add-user \
+  --config-file ../config \
+  --region "us-ashburn-1" \
+  --user-id "$USER_OCID" \
+  --group-id "$GROUP_OCID"

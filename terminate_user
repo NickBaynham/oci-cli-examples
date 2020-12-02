@@ -1,12 +1,18 @@
 #!/bin/bash
 
 # Terminate User
+
 if [ ! "$1" ]; then
   echo "terminate_user <user_ocid>"
   exit 1
 fi
-
 user_ocid=$1
 echo "Deleting User $user_ocid"
+
 TENANCY_OCID=`cat ../config | grep tenancy | sed 's/tenancy=//'`
-oci iam user delete --region us-ashburn-1 --config-file ../config --user-id $user_ocid
+
+oci iam user delete \
+  --region us-ashburn-1 \
+  --config-file ../config \
+  --user-id $user_ocid \
+  --wait-for-state DELETED

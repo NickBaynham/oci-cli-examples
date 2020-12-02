@@ -16,7 +16,7 @@ echo "Working in tenancy $TENANCY_OCID"
 USER_OCID=$(oci iam user list \
   --config-file ../config \
   -c "$TENANCY_OCID" \
-  --query "data[?name==$user_name] | [0].id" \
+  --query "data[?name=='$user_name'] | [0].id" \
   --all \
   --raw-output \
   )

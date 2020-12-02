@@ -1,5 +1,15 @@
 #!/bin/bash
 
 # Terminate a Gateway
+
+if [ ! $1 ]; then
+  echo "terminate_gateway <gateway_ocid>"
+  exit 1
+fi
 gateway=$1
-oci network internet-gateway delete --config-file ../config --cli-rc-file ../osi_cli_rc --ig-id $gateway --wait-for-state TERMINATED
+
+oci network internet-gateway delete \
+  --config-file ../config \
+  --cli-rc-file ../osi_cli_rc \
+  --ig-id $gateway \
+  --wait-for-state TERMINATED

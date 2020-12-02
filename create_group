@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Create a User Group
+
+if [ ! $1 ]; then
+  echo "create_group <group_name>"
+  exit 1
+fi
+
+GROUP_NAME="$1"
+TENANCY_OCID=$(cat ../config | grep tenancy | sed 's/tenancy=//')
+
+GROUP_OCID=$(oci iam group create \
+  --region us-ashburn-1 \
+  --config-file ../config \
+  --compartment-id $TENANCY_OCID \
+  --name "$GROUP_NAME" \
+  --description "$GROUP_NAME - CLI" \
+  --query "data.id" \
+  | tr -d '"'
+  )
+
+echo "Created Group $GROUP_NAME : $GROUP_OCID"

@@ -1,6 +1,16 @@
 #!/bin/bash
 
 # Terminate an Instance
-vm_ocid=$1
-echo "Terminating Instance: $vm_ocid"
-oci compute instance terminate --config-file ../config --cli-rc-file ../oci_cli_rc --instance-id $vm_ocid --wait-for-state TERMINATED
+
+if [ ! "$1" ]; then
+  echo "terminate_instance <instance_ocid>"
+  exit 1
+fi
+INSTANCE_OCID=$1
+echo "Terminating Instance: $INSTANCE_OCID"
+
+oci compute instance terminate \
+  --config-file ../config \
+  --cli-rc-file ../oci_cli_rc \
+  --instance-id $INSTANCE_OCID \
+  --wait-for-state TERMINATED

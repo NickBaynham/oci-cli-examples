@@ -1,0 +1,21 @@
+# Get a Group by Name
+
+if [ ! "$1" ]; then
+  echo "get_group <group_name>"
+  exit 1
+fi
+GROUP_NAME="$1"
+TENANCY_OCID=$(cat ../config | grep tenancy | sed 's/tenancy=//')
+echo "Getting Group $GROUP_NAME"
+
+GROUP_OCID=$(oci iam group list \
+  --region us-ashburn-1 \
+  --config-file ../config \
+  - $TENANCY_OCID \
+  --all \
+  --query "data[?name=='$GROUP_NAME'] | [0].id" \
+  | tr -d '"')
+
+echo "Group $GROUP_NAME OCID is $GROUP_OCID"
+
+

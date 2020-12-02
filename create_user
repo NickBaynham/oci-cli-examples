@@ -27,7 +27,7 @@ echo "User Ocid: $USER_OCID"
 SEARCH_RESULT=$(oci iam user list \
   --config-file ../config \
   -c "$TENANCY_OCID" \
-  --query "data[?name==$user_name] | [0].id" \
+  --query "data[?name=='$user_name'] | [0].id" \
   --all \
   | tr -d '"' \
   )
@@ -37,7 +37,7 @@ echo "Found user $user_name ocid is $SEARCH_RESULT"
 SEARCH_RESULT_NAME=$(oci iam user list \
   --config-file ../config \
   -c "$TENANCY_OCID" \
-  --query "data[?name==$user_name] | [0].name" \
+  --query "data[?name=='$user_name'] | [0].name" \
   --all \
   | tr -d '"' \
   )
